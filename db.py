@@ -4,11 +4,12 @@ import sqlite3
 sqlite wrapper
 """
 
+
 class Connection(object):
     def __init__(self, path, **kw):
         self.db_conn = sqlite3.connect(path, **kw)
 
-    def newHandler(self):
+    def new_handler(self):
         return Handler(self.db_conn)
 
     def close(self):
@@ -17,7 +18,7 @@ class Connection(object):
             self.db_conn = None
 
 
-class Handler(object):    
+class Handler(object):
     def __init__(self, connection):
         self.cursor = connection.cursor()
 
@@ -41,14 +42,14 @@ class Handler(object):
         parameters = list(map(lambda x: str(x), parameters))
         self.execute(sql, parameters)
         return self.cursor.fetchall()
-    
+
     def fetch_first(self, sql, parameters=[]):
         values = self.fetch_all(sql, parameters)
         if len(values) > 0:
             return values[0]
         return None
 
-    def create_text_table(self, table_name, columns, table_constraint=None):        
+    def create_text_table(self, table_name, columns, table_constraint=None):
         """
         create a table whose column types are all 'TEXT'
         columns: [str]
@@ -57,9 +58,12 @@ class Handler(object):
         col_def = list(map(lambda x: x + ' TEXT', columns))
         self.create_table(table_name, col_def, table_constraint)
 
-    def create_table(self, table_name, column_defs, table_constraint=None):
+    def create_table(self, table_name, column_defs, if_not_exists=True, table_constraint=None):
         col_def = ', '.join(column_defs)
-        sql = 'CREATE TABLE IF NOT EXISTS ' + table_name + ' (' + col_def
+        sql = 'CREATE TABLE '
+        if if_not_exists:
+            sql = sql + 'IF NOT EXISTS '
+        sql = sql + table_name + ' (' + col_def
         if table_constraint is not None:
             sql = sql + ', ' + table_constraint + ')'
         else:
@@ -72,7 +76,7 @@ class Handler(object):
             sql = sql + ' UNIQUE'
         sql = sql + ' INDEX IF NOT EXISTS ' + index_name + ' ON ' + table_name + '(' + (', '.join(columns)) + ')'
 
-    def insert_into_table(self, table_name, values, keys = None, or_action=None):
+    def insert_into_table(self, table_name, values, keys=None, or_action=None):
         sql = 'INSERT'
         if or_action is not None:
             sql = sql + ' OR ' + or_action
@@ -81,7 +85,7 @@ class Handler(object):
             sql = sql + ' (' + ', '.join(keys) + ')'
         sql = sql + ' VALUES(' + (', '.join(['?'] * len(values))) + ')'
         self.cursor.execute(sql, values)
-    
+
     def update_table(self, table_name, kvs, where):
         sql = 'UPDATE ' + table_name + ' SET '
         set_statments = []
@@ -103,12 +107,3 @@ class Handler(object):
     def drop_table(self, table_name):
         sql = 'DROP TABLE IF EXISTS ' + table_name
         self.cursor.execute(sql)
-
-
-
-
-
-
-
-
-
