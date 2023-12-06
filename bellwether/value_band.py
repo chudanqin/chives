@@ -12,17 +12,17 @@ def figure_band(target):
 
                 table_name = 'target_' + target
                 handler0.drop_table(table_name)
-                handler0.create_table(
-                    table_name,
-                    ['code TEXT', 'name TEXT', 'min REAL', 'max REAL', 'curr REAL', 'p REAL', 'industry TEXT'])
+                # handler0.create_table(
+                #     table_name,
+                #     ['code TEXT', 'name TEXT', 'min REAL', 'max REAL', 'curr REAL', 'p REAL', 'mv REAL', 'industry TEXT'])
 
                 for si in stock_info:
                     code = tushare_init.baostock_code(si[0])
                     min_max = handler1.fetch_first(
-                        'SELECT min(cast(%s as decimal)), max(cast(%s as decimal)) FROM %s WHERE code = ? AND %s IS NOT \'\' and %s > 0' % (
+                        'SELECT min(%s), max(%s) FROM %s WHERE code = ? AND %s IS NOT \'\' and %s > 0' % (
                             target, target, db_init.DB_TABLE_STOCK_DAILY, target, target), [code])
                     curr = handler1.fetch_first(
-                        'SELECT cast(%s as decimal) FROM %s WHERE code = ? and %s is not \'\' ORDER BY date DESC limit 1' % (
+                        'SELECT %s, amount, turn FROM %s WHERE code = ? and %s is not \'\' ORDER BY date DESC limit 1' % (
                             target, db_init.DB_TABLE_STOCK_DAILY, target), [code])
 
                     if min_max is None or len(min_max) < 2 or min_max[0] is None or min_max[0] is None:
@@ -32,14 +32,15 @@ def figure_band(target):
 
                     min_price = min_max[0]
                     max_price = min_max[1]
-                    curr = curr[0]
-                    if curr < 0:
+                    if curr[0] < 0 or curr[1] <= 0 or curr[2] <= 0:
+                        # pass all less than 0
                         continue
 
                     p = (curr - min_price) / (max_price - min_price) if max_price > min_price else 1.0
+                    mv = round(curr[1] / curr[2] * 100 / 100000000, 2)
 
                     handler0.insert_into_table(
-                        table_name, [code, si[1], min_price, max_price, curr, round(p, 3), si[2]])
+                        table_name, [code, si[1], min_price, max_price, curr, round(p, 3), mv, si[2]])
 
             except Exception as e:
                 print(e)

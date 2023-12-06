@@ -80,4 +80,4 @@ def funds_flow_by_value(begin_date='2015-01-01', end_date=date_util.now_date_str
     db_init.execute(db_init.DB_PATH_BELLWETHER, _tx0)
 
 
-funds_flow_by_value('2022-11-11', '2023-11-21')
+funds_flow_by_value('2023-11-11', '2023-11-30')
