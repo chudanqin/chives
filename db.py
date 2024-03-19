@@ -35,15 +35,21 @@ class Handler(object):
         transaction(self)
         self.cursor.execute('COMMIT;')
 
-    def execute(self, sql, parameters=[]):
+    def execute(self, sql, parameters=None):
+        if parameters is None:
+            parameters = []
         self.cursor.execute(sql, parameters)
 
-    def fetch_all(self, sql, parameters=[]):
+    def fetch_all(self, sql, parameters=None):
+        if parameters is None:
+            parameters = []
         parameters = list(map(lambda x: str(x), parameters))
         self.execute(sql, parameters)
         return self.cursor.fetchall()
 
-    def fetch_first(self, sql, parameters=[]):
+    def fetch_first(self, sql, parameters=None):
+        if parameters is None:
+            parameters = []
         values = self.fetch_all(sql, parameters)
         if len(values) > 0:
             return values[0]

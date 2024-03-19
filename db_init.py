@@ -3,7 +3,7 @@ import db
 
 _DB_CONNECTIONS = {}
 
-DB_DIR = 'data'
+DB_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
 DB_PATH_MAIN = os.path.join(DB_DIR, 'main.db')
 DB_PATH_BELLWETHER = os.path.join(DB_DIR, 'bellwether.db')
 
@@ -11,7 +11,10 @@ DB_TABLE_INDEX_BASIC = 'index_basic'
 DB_TABLE_STOCK_BASIC = 'stock_basic'
 # DB_TABLE_UPDATE_DATE = 'update_date'
 DB_TABLE_STOCK_DAILY = 'stock_daily'
-DB_TABLE_AMOUNT_ANALYSIS = 'amount_analysis'
+DB_TABLE_CLIMAX_ANALYSIS = 'climax_analysis'
+DB_TABLE_BOTTOM_REVERSAL = 'bottom_reversal'
+DB_TABLE_LIMIT_UP = 'limit_up'
+DB_TABLE_FLUCTUATE = 'fluctuate'
 
 
 def get_connection(path):

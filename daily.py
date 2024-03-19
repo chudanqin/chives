@@ -167,20 +167,20 @@ def update_stock_daily_from_pool():
     curr_date = date_util.now_date_str()
     for sc in stock_codes:
         revised_code = sc  # tushare_init.baostock_code(si[0])
-        begin_date = _get_latest_date(revised_code, curr_date)
-        if begin_date == curr_date:
-            print('stock(%s) updated already on %s' % (revised_code, curr_date))
-            continue
+        begin_date = _get_latest_date(revised_code)
+        if begin_date is not None:
+            if begin_date >= curr_date:
+                print('stock(%s) updated already on %s' % (revised_code, curr_date))
+                continue
+            begin_date = date_util.date_str_from_day_delta(begin_date)
         _update_stock_daily(revised_code, begin_date, curr_date)
-        print('stock(%s) daily done!' % (revised_code))
+        print('stock(%s) daily done!' % (revised_code, ))
 
     bs.logout()
     print('baostock logout')
 
 
-def _get_latest_date(code, target_date, default_date=None):
-    if default_date is None:
-        default_date = target_date
+def _get_latest_date(code):
     row = None
 
     def _tx1(handler):
@@ -189,10 +189,8 @@ def _get_latest_date(code, target_date, default_date=None):
 
     db_init.execute(db_init.DB_PATH_MAIN, _tx1)
 
-    if row is not None and len(row) == 1 and row[0] is not None:
-        if row[0] >= target_date:
-            return default_date
-        return date_util.date_str_from_day_delta(row[0])
+    if row is not None and len(row) == 1:
+        return row[0]
     return None
 
 # update_stock_basic()
