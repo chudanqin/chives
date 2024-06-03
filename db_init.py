@@ -15,6 +15,7 @@ DB_TABLE_CLIMAX_ANALYSIS = 'climax_analysis'
 DB_TABLE_BOTTOM_REVERSAL = 'bottom_reversal'
 DB_TABLE_LIMIT_UP = 'limit_up'
 DB_TABLE_FLUCTUATE = 'fluctuate'
+DB_TABLE_LOW_CLIMAX = 'low_climax'
 
 
 def get_connection(path):

@@ -5,6 +5,7 @@ from bellwether import fluctuate
 from bellwether import value_band
 from bellwether import funds_flow
 from bellwether import industry_flow
+from bellwether import low_climax
 
 
 # def guess_bottom_reversal(date=date_util.now_date_str(), days=20):
@@ -51,8 +52,8 @@ from bellwether import industry_flow
 
 
 def tj():
-    print("tj begin...")
     # daily.update_main_index_basic() #
+    print("tj begin...")
     daily.update_stock_basic()
     daily.update_stock_daily_from_pool()
     climax.process()
@@ -61,6 +62,7 @@ def tj():
     value_band.process()
     funds_flow.process()
     industry_flow.process()
+    low_climax.process()
     print("tj end...")
 
 

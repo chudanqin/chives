@@ -1,2 +1,9 @@
+# compile mxnet from source on macos m1, @see https://mxnet.apache.org/versions/1.9.1/get_started/osx_setup.html
+# add the package from local path of mxnet compiled above
+# version of numpy should be less than 1.23.5
+# version of python should be 3.9 (3.12 is not satisfied)
+
+numpy==1.23.5
 baostock
 tushare
+mxnet
