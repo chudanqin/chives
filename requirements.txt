@@ -3,7 +3,7 @@
 # version of numpy should be less than 1.23.5
 # version of python should be 3.9 (3.12 is not satisfied)
 
-numpy==1.23.5
+numpy
 baostock
 tushare
 mxnet
