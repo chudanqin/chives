@@ -1,5 +1,6 @@
 import db_init
 import tushare_init
+from type_util import parse_float as p_f
 
 
 def figure_band(target):
@@ -32,7 +33,7 @@ def figure_band(target):
 
                     min_price = min_max[0]
                     max_price = min_max[1]
-                    if curr[0] < 0 or curr[1] <= 0 or curr[2] <= 0:
+                    if p_f(curr[0]) < 0 or p_f(curr[1]) <= 0 or p_f(curr[2]) <= 0:
                         # pass all less than 0
                         continue
 

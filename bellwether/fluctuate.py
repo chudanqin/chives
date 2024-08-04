@@ -47,6 +47,9 @@ def _process(begin_date, end_date):
                                                        % (db_init.DB_TABLE_STOCK_DAILY,),
                                                        [begin_date, end_date, code])
 
+                    if min_max_data[0] is None or min_max_data[1] is None:
+                        continue
+
                     if first_data is not None and last_data is not None:
                         # rise/fall from begin_date to end_date
                         diff = (last_data[0] - first_data[0]) / first_data[0]
@@ -58,15 +61,15 @@ def _process(begin_date, end_date):
                         handler0.insert_into_table(db_init.DB_TABLE_FLUCTUATE, [
                             code,
                             si[1],
-                            first_data[0],
-                            last_data[0],
-                            min_max_data[0],
-                            min_max_data[1],
+                            round(first_data[0], 2),
+                            round(last_data[0], 2),
+                            round(min_max_data[0], 2),
+                            round(min_max_data[1], 2),
                             round(100 * diff, 2),
                             round(100 * diff_max, 2),
                             round(100 * diff_min, 2),
-                            last_data[1],
-                            last_data[2],
+                            round(last_data[1], 2),
+                            round(last_data[2], 2),
                             si[2]
                         ])
 
