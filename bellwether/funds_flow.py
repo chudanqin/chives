@@ -1,5 +1,5 @@
-import date_util
-import db_init
+import util.date_util as date_util
+import init.db_init as db_init
 
 
 # 50/300/500/1000/2000/trailing-x

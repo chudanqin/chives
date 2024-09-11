@@ -1,0 +1,1 @@
+print('%s is loaded' % __file__)

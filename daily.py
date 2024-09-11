@@ -1,8 +1,8 @@
 import baostock as bs
 
-import date_util
-import db_init
-import tushare_init
+import util.date_util as date_util
+import init.db_init as db_init
+import init.tushare_init as tushare_init
 
 _stock_daily_query_parameters \
     = 'code, date, open, high, low, close, preclose, volume, amount, adjustflag, turn, tradestatus, pctChg, peTTM, pbMRQ, psTTM, pcfNcfTTM, isST'

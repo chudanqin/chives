@@ -1,6 +1,6 @@
-import date_util
-import db_init
-import tushare_init
+import util.date_util as date_util
+import init.db_init as db_init
+import init.tushare_init as tushare_init
 
 
 def funds_flow_by_industry(begin_date='2015-01-01', end_date=date_util.now_date_str()):
@@ -68,3 +68,4 @@ def process():
     now_date = date_util.now_date_str()
     begin_date = date_util.date_str_from_day_delta(now_date, day_delta=-5)
     funds_flow_by_industry(begin_date, now_date)
+

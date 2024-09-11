@@ -1,9 +1,9 @@
 import os
-import db
+import init.db as db
 
 _DB_CONNECTIONS = {}
 
-DB_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
+DB_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data')
 DB_PATH_MAIN = os.path.join(DB_DIR, 'main.db')
 DB_PATH_BELLWETHER = os.path.join(DB_DIR, 'bellwether.db')
 
@@ -16,6 +16,7 @@ DB_TABLE_BOTTOM_REVERSAL = 'bottom_reversal'
 DB_TABLE_LIMIT_UP = 'limit_up'
 DB_TABLE_FLUCTUATE = 'fluctuate'
 DB_TABLE_LOW_CLIMAX = 'low_climax'
+DB_TABLE_TT = 'tt'
 
 
 def get_connection(path):

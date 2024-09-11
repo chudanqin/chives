@@ -1,6 +1,8 @@
-import date_util
-import db_init
-import tushare_init
+import util.date_util as date_util
+import init.db_init as db_init
+import init.tushare_init as tushare_init
+import util.type_util as type_util
+import math
 
 # _SHORT_DAYS = 1
 # _LONG_DAYS = 30
@@ -8,16 +10,13 @@ import tushare_init
 
 
 def _parse_float(text, default_value=0.0):
-    try:
-        return float(text)
-    except Exception as e:
-        print('parse float error(%s), %s' % (text, e))
-        return default_value
+    return type_util.parse_float(text, default_value)
 
 
 def _amount_analyze(data, short_days, long_days):
     short_total = 0.0
     long_total = 0.0
+    early_amounts = []
     close_list = []
 
     i = 0
@@ -30,17 +29,22 @@ def _amount_analyze(data, short_days, long_days):
         long_total += amount
         if i < short_days:
             short_total += amount
+        else:
+            early_amounts.append(amount)
 
         i += 1
 
     long_avg = long_total / long_days
     short_avg = short_total / short_days
 
+    early_avg = (long_total - short_avg) / (long_days - short_days)
+    early_amount_percent_variance = sum( ((v - early_avg) / early_avg) ** 2 for v in early_amounts )
+
     last_rise = 0.0
     if len(close_list) > 1 and close_list[0] > 0.0 and close_list[1] > 0.0:
         last_rise = (close_list[0] - close_list[1]) / close_list[1]
 
-    return short_avg, long_avg, last_rise
+    return short_avg, long_avg, last_rise, math.sqrt(early_amount_percent_variance)
 
 
 def process(short_days=1, long_days=30, date=date_util.now_date_str()):
@@ -79,7 +83,7 @@ def process(short_days=1, long_days=30, date=date_util.now_date_str()):
 
                 handler0.drop_table(db_init.DB_TABLE_CLIMAX_ANALYSIS)
                 handler0.create_table(db_init.DB_TABLE_CLIMAX_ANALYSIS, [
-                    'code TEXT', 'name TEXT', 'fast REAL', 'slow REAL', 'climax REAL', 'l_rise REAL', 'r_rise REAL',
+                    'code TEXT', 'name TEXT', 'fast REAL', 'slow REAL', 'climax REAL', 'variance REAL', 'l_rise REAL', 'r_rise REAL',
                     'pe REAL', 'pb REAL', 'industry TEXT'])
 
                 for si in stock_info:
@@ -103,6 +107,7 @@ def process(short_days=1, long_days=30, date=date_util.now_date_str()):
                             round(short_avg / 10000, 2),
                             round(long_avg / 10000, 2),
                             round(short_avg / long_avg, 2),
+                            round(res[3], 2),
                             round(last_rise * 100, 2),
                             round((data[0][2] - data[-1][2]) / (data[-1][2]) * 100, 2),
                             round(data[0][3], 2),

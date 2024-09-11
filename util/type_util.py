@@ -3,12 +3,12 @@
 def _parse(value, to_type, default_value):
     if isinstance(value, to_type):
         return value
-    if value is '':
+    if value == '':
         return default_value
     try:
         return to_type(value)
     except Exception as e:
-        print(e)
+        print('parse type(%s) value(%s) error(%s), %s' % (to_type, value, e))
         return default_value
 
 

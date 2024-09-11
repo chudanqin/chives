@@ -1,5 +1,5 @@
-# import db_init
-# import tushare_init
+# import init.db_init as db_init
+# import init.tushare_init as tushare_init
 # import date_util
 #
 #

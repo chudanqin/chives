@@ -1,6 +1,6 @@
-import db_init
-import tushare_init
-from type_util import parse_float as p_f
+import init.db_init as db_init
+import init.tushare_init as tushare_init
+from util.type_util import parse_float as p_f
 
 
 def figure_band(target):

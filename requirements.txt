@@ -6,4 +6,5 @@
 numpy
 baostock
 tushare
-mxnet
+#mxnet
+
